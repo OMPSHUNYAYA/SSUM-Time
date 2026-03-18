@@ -1,0 +1,3 @@
+SHA256 hash of D:\OMP\SSUM-TIME\Public_Release\demo\ssum_time_demo.html:
+83cb54b7f890e8effb1e7d1102ab26f27d0787f1780063572f4a79c6ab792010
+CertUtil: -hashfile command completed successfully.

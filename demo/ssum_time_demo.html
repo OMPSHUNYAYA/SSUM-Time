@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SSUM-Time Demo</title>
+  <style>
+    :root {
+      --bg: #08101d;
+      --panel: #121a2b;
+      --panel-2: #182338;
+      --text: #e8eefc;
+      --muted: #9fb0d1;
+      --accent: #6ea8ff;
+      --good: #27c281;
+      --warn: #ffb020;
+      --bad: #ff5d73;
+      --border: #24314d;
+      --shadow: 0 12px 32px rgba(0,0,0,.28);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: linear-gradient(180deg, #08101d 0%, #0b1220 100%);
+      color: var(--text);
+      line-height: 1.45;
+    }
+
+    .wrap {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      height: fit-content;
+    }
+
+    .topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+      padding: 14px 16px;
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .formula {
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 13px;
+      white-space: nowrap;
+      overflow-x: auto;
+      color: #dfe8ff;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 12px;
+      margin-bottom: 12px;
+      align-items: start;
+    }
+
+    .panel { padding: 18px; }
+    .panel h1, .panel h2, .panel h3 { margin: 0 0 8px; }
+    .panel h1 { font-size: 28px; }
+    .lead { margin: 0; color: var(--muted); font-size: 14px; }
+
+    .clock-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .timebox, .metric, .control-box, .cycle, .event, .footer-note {
+      background: rgba(255,255,255,.03);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+
+    .timebox, .metric, .control-box, .event, .footer-note { padding: 14px; }
+
+    .title {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 8px;
+    }
+
+    .big {
+      font-size: 27px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .small {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 13px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .state-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.03);
+    }
+
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .stack { display: grid; gap: 10px; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 7px;
+    }
+
+    input, select, button {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: #0d1627;
+      color: var(--text);
+      padding: 11px 12px;
+      font-size: 14px;
+    }
+
+    input[type="range"] { padding: 0; }
+
+    button {
+      cursor: pointer;
+      transition: transform .06s ease, opacity .2s ease;
+      background: linear-gradient(180deg, #16304e 0%, #112742 100%);
+      border-color: #2d4a73;
+      font-weight: 700;
+    }
+
+    button.good { background: linear-gradient(180deg, #126543 0%, #0f5338 100%); border-color: #1f8c62; }
+    button.warn { background: linear-gradient(180deg, #694a10 0%, #593e0f 100%); border-color: #a97818; }
+    button.bad { background: linear-gradient(180deg, #672031 0%, #531828 100%); border-color: #a03b52; }
+    button.secondary { background: #10192b; border-color: var(--border); }
+    button:active { transform: translateY(1px); }
+
+    button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .subsection-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--muted);
+      font-weight: 800;
+      margin-top: 2px;
+    }
+
+    .helper-text {
+      font-size: 12px;
+      line-height: 1.45;
+      color: var(--muted);
+      margin-top: -2px;
+    }
+
+    .flow-note {
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: rgba(255,255,255,0.02);
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 12px;
+    }
+
+    .metric .label {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 6px;
+    }
+    .metric .value { font-size: 18px; font-weight: 700; }
+
+    .badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .badge {
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #0f1728;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 12px;
+      margin-bottom: 12px;
+      align-items: stretch;
+    }
+
+    .cycle-list, .timeline { display: grid; gap: 10px; }
+    .timeline { max-height: 320px; overflow: auto; }
+    .metric-strip { display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:10px; margin-top:10px; }
+    .metric-strip .metric { padding:12px; }
+    .info-note {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #0f1728;
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+    .research-box {
+      margin-top: 6px;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: #0f1728;
+    }
+    .research-box .notice-title {
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+    .research-box .notice-text {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .cycle { padding: 14px; }
+    .cycle-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      gap: 8px;
+    }
+    .cycle-name { font-weight: 700; }
+    .cycle-meta { color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+    .bar {
+      width: 100%; height: 12px; background: #0b1322; border: 1px solid var(--border);
+      border-radius: 999px; overflow: hidden; position: relative;
+    }
+    .fill-observed, .fill-expected {
+      position: absolute; top: 0; height: 100%; border-radius: 999px;
+    }
+    .fill-expected { background: rgba(110,168,255,.45); }
+    .fill-observed { background: rgba(39,194,129,.65); }
+
+    .footer-note { color: var(--muted); font-size: 13px; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-variant-numeric: tabular-nums; }
+
+    @media (max-width: 1180px) {
+      .hero, .main-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 780px) {
+      .wrap { padding: 12px; }
+      .clock-grid, .controls-grid, .mini-grid, .quick-actions, .row { grid-template-columns: 1fr; }
+      .topline { flex-direction: column; align-items: flex-start; }
+      .big { font-size: 22px; }
+      .panel h1 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="card topline">
+      <div>
+        <div class="eyebrow">SSUM-Time • Structural Autonomous Time Engine</div>
+      </div>
+      <div class="formula">t_est_next = t_est + elapsed_monotonic_time + f(observed_phase - expected_phase)</div>
+    </section>
+
+    <section class="hero">
+      <div class="card panel">
+        <h1>Structural Time Recovery Demo</h1>
+        <p class="lead">Start it like a clock first. Then apply a live bad anchor beside the clock or run long-gap structural re-entry with a single action when you want to test deeper recovery behavior.</p>
+        <div class="badges">
+          <span class="badge">Start like a clock</span>
+          <span class="badge">Watch `GENERAL_TIME -> FULL_LOCK`</span>
+          <span class="badge">Advanced tests optional</span>
+        </div>
+
+        <div class="clock-grid">
+          <div class="timebox">
+            <div class="title">Internal Structural Time</div>
+            <div class="big mono" id="internalTime">--</div>
+            <div class="small mono" id="internalDate">--</div>
+          </div>
+          <div class="timebox">
+            <div class="title">Observed Reference Time</div>
+            <div class="big mono" id="observedTime">--</div>
+            <div class="small mono" id="observedDate">--</div>
+          </div>
+          <div class="timebox">
+            <div class="title">Residual and Correction</div>
+            <div class="big mono"><span id="obsResidual">0.0</span> ms</div>
+            <div class="small mono">Applied: <span id="appliedCorrection">0.0</span> ms | Post: <span id="postResidual">0.0</span> ms</div>
+          </div>
+          <div class="timebox">
+            <div class="title">Governance</div>
+            <div class="big"><span class="state-pill" id="statePill"><span class="dot" id="stateDot"></span><span id="stateText">GENERAL_TIME</span></span></div>
+            <div class="small mono">Acquire: <span id="acquireCount">0</span> | Holdover: <span id="holdoverCount">0</span> | Abstain: <span id="abstainCount">0</span></div>
+          </div>
+        </div>
+
+        <div class="control-box stack" style="margin-top:14px;">
+          <h3>Live Disturbance Test</h3>
+          <div class="helper-text">Apply a bad anchor directly beside the clock and watch the live structural response immediately.</div>
+          <div class="row">
+            <div>
+              <label for="badAnchorMinutes">Bad Anchor Offset (minutes)</label>
+              <input id="badAnchorMinutes" type="number" step="1" value="90" />
+            </div>
+            <div style="display:flex; align-items:end;">
+              <button class="warn" id="badAnchorBtn">Apply Bad Anchor</button>
+            </div>
+          </div>
+          <div class="flow-note mono" id="disturbanceBanner">Disturbance: none</div>
+        </div>
+
+        <div class="control-box stack" style="margin-top:14px;">
+          <h3>Live Summary</h3>
+          <div class="helper-text">A compact view of the current live event, continuity memory, and re-entry jump so the top interaction area stays visually complete and easy to scan.</div>
+          <div class="mini-grid">
+            <div class="metric">
+              <div class="label">Event Type</div>
+              <div class="value mono" id="topEventType">Normal Tracking</div>
+            </div>
+            <div class="metric">
+              <div class="label">Requested Gap</div>
+              <div class="value mono" id="topRequestedGap">--</div>
+            </div>
+            <div class="metric">
+              <div class="label">Structural Jump</div>
+              <div class="value mono" id="topStructuralJump">--</div>
+            </div>
+            <div class="metric">
+              <div class="label">Disturbance</div>
+              <div class="value mono" id="topDisturbance">none</div>
+            </div>
+          </div>
+          <div class="footer-note mono" id="topContinuityStatus">Continuity memory: waiting for live auto-capture.</div>
+        </div>
+      </div>
+
+      <div class="card panel">
+        <h2>Run SSUM-Time</h2>
+        <p class="lead">For most users: click <strong>Reset</strong>, then <strong>Start Engine</strong>. Use <strong>Run Long-Gap Re-entry</strong> to auto-capture the current structural state and simulate restart after an elapsed gap.</p>
+        <div class="info-note">No external time synchronization is used during continuity recovery in this demo.</div>
+        <div class="quick-actions">
+          <button class="good" id="startBtn">Start Engine</button>
+          <button class="bad" id="resetBtn">Reset</button>
+          <button class="secondary" id="pauseBtn">Pause</button>
+          <button class="secondary" id="resumeBtn">Resume</button>
+        </div>
+
+        <div class="mini-grid" style="margin-top:12px;">
+          <div class="metric">
+            <div class="label">Current State</div>
+            <div class="value" id="heroState">GENERAL_TIME</div>
+          </div>
+          <div class="metric">
+            <div class="label">Post Residual</div>
+            <div class="value"><span id="heroResidual">0.0</span> ms</div>
+          </div>
+          <div class="metric">
+            <div class="label">Observation Mode</div>
+            <div class="value" id="heroMode">host_assist</div>
+          </div>
+          <div class="metric">
+            <div class="label">Drift</div>
+            <div class="value"><span id="heroDrift">0</span> ppm</div>
+          </div>
+          <div class="metric">
+            <div class="label">Healthy Streak</div>
+            <div class="value" id="heroHealthy">0</div>
+          </div>
+          <div class="metric">
+            <div class="label">Recovery Streak</div>
+            <div class="value" id="heroRecovery">0</div>
+          </div>
+          <div class="metric">
+            <div class="label">Raw State</div>
+            <div class="value" id="heroRawState">GENERAL_TIME</div>
+          </div>
+          <div class="metric">
+            <div class="label">State Receipt</div>
+            <div class="value mono" id="heroReceipt" style="font-size:13px; word-break:break-all;">--</div>
+          </div>
+        </div>
+
+        <div class="control-box stack" style="margin-top:12px;">
+          <h3>Continuity / Restart Test</h3>
+          <div class="helper-text">Single-action long-gap recovery. The demo auto-captures the current structural state and runs re-entry without separate save or load steps.</div>
+          <div class="row">
+            <div>
+              <label for="reentryDays">Re-entry Elapsed (days, 1-180)</label>
+              <input id="reentryDays" type="number" step="1" min="1" max="180" value="90" />
+            </div>
+            <div style="display:flex; align-items:end;">
+              <button class="warn" id="reentryBtn">Run Long-Gap Re-entry</button>
+            </div>
+          </div>
+          <div class="flow-note mono" id="reentryFlow">Flow: auto-capture state -> simulate elapsed gap -> searched reacquisition</div>
+          <div class="helper-text" id="reentryNote">Demo limit: re-entry gap is clamped to 1-180 days. Large elapsed intervals are shown as a structural jump first, then bounded cleanup correction.</div>
+          <div class="metric-strip">
+            <div class="metric">
+              <div class="label">Requested Gap</div>
+              <div class="value mono" id="metricRequestedGap">--</div>
+            </div>
+            <div class="metric">
+              <div class="label">Structural Jump</div>
+              <div class="value mono" id="metricStructuralJump">--</div>
+            </div>
+            <div class="metric">
+              <div class="label">Event Type</div>
+              <div class="value mono" id="metricEventType">Normal Tracking</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-note mono" id="capsuleStatus" style="margin-top:12px;">Continuity memory: waiting for live auto-capture.</div>
+      </div>
+    </section>
+
+    <section class="main-grid">
+      <div class="card panel">
+        <h2>Configuration</h2>
+        <p class="lead">Set the core engine parameters below. The live disturbance and long-gap re-entry actions are now located in the top interaction panels.</p>
+        <div class="controls-grid">
+          <div class="control-box stack">
+            <h3>Engine Settings</h3>
+            <div class="row">
+              <div>
+                <label for="modeSelect">Observation Mode</label>
+                <select id="modeSelect">
+                  <option value="host_assist">host_assist</option>
+                  <option value="free_run">free_run</option>
+                  <option value="continuity_reentry">continuity_reentry</option>
+                </select>
+              </div>
+              <div>
+                <label for="tickSelect">Tick Rate</label>
+                <select id="tickSelect">
+                  <option value="1000">1000 ms</option>
+                  <option value="500">500 ms</option>
+                  <option value="250">250 ms</option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div>
+                <label for="driftRange">Simulated Drift (ppm)</label>
+                <input id="driftRange" type="range" min="-5000" max="5000" step="50" value="0" />
+              </div>
+              <div>
+                <label for="driftInput">Drift Value</label>
+                <input id="driftInput" type="number" min="-5000" max="5000" step="50" value="0" />
+              </div>
+            </div>
+            <div class="row">
+              <div>
+                <label for="maxCorrection">Max Correction (ms)</label>
+                <input id="maxCorrection" type="number" min="1" max="2000" step="1" value="250" />
+              </div>
+              <div>
+                <label for="promoThreshold">Promotion Threshold</label>
+                <input id="promoThreshold" type="number" min="1" max="10" step="1" value="3" />
+              </div>
+            </div>
+          </div>
+
+          <div class="control-box stack">
+            <h3>Operational Notes</h3>
+            <div class="subsection-title">Live Disturbance</div>
+            <div class="helper-text">Bad anchor testing now lives beside the clock so the effect can be seen without scrolling.</div>
+            <div class="flow-note">Live path: `t_est_next = t_est + f(observed_phase - expected_phase)`</div>
+
+            <div class="subsection-title" style="margin-top:8px;">Continuity / Restart</div>
+            <div class="helper-text">Long-gap re-entry is now a single action. The continuity memory is captured automatically when re-entry is triggered.</div>
+            <div class="flow-note">Continuity path: `t_restart = t_capsule + elapsed_estimate` -> `t_est_next = t_restart + f(residual)`</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card panel">
+        <h2>Structural Phase Alignment</h2>
+        <p class="lead">Observed and expected cycle phases are continuously compared across multiple structural cycles to maintain temporal coherence.</p>
+        <div class="cycle-list" id="cycleList"></div>
+      </div>
+    </section>
+
+    <section class="main-grid">
+      <div class="card panel">
+        <h2>State Timeline</h2>
+        <p class="lead">This timeline records major state transitions, recovery actions, capsule events, and re-entry behavior.</p>
+        <div class="timeline" id="timeline"></div>
+      </div>
+
+      <div class="card panel">
+        <h2>Governance Diagnostics</h2>
+        <p class="lead">This panel exposes the operational trust logic behind the clock so the demo behaves like a governed structural service rather than a simple visual timer.</p>
+        <div class="mini-grid">
+          <div class="metric">
+            <div class="label">Promotions</div>
+            <div class="value" id="metricPromotions">0</div>
+          </div>
+          <div class="metric">
+            <div class="label">Recoveries</div>
+            <div class="value" id="metricRecoveries">0</div>
+          </div>
+          <div class="metric">
+            <div class="label">Soft Critical</div>
+            <div class="value" id="metricSoft">0</div>
+          </div>
+          <div class="metric">
+            <div class="label">Hard Critical</div>
+            <div class="value" id="metricHard">0</div>
+          </div>
+          <div class="metric">
+            <div class="label">Re-entry Score</div>
+            <div class="value mono" id="metricReentryScore">--</div>
+          </div>
+          <div class="metric">
+            <div class="label">Day Offset</div>
+            <div class="value" id="metricDayOffset">--</div>
+          </div>
+        </div>
+        <div class="footer-note" style="margin-top:12px;">
+          <strong>Demonstrated capabilities</strong><br><br>
+          • live structural clock behavior<br>
+          • `host_assist`, `free_run`, and true searched `continuity_reentry`<br>
+          • bounded correction and deterministic governance<br>
+          • auto-captured continuity memory and long-gap replay simulation<br>
+          • structural state receipt for replay-style verification
+        </div>
+      </div>
+    </section>
+
+    <section class="card panel" style="margin-bottom:12px;">
+      <div class="research-box">
+        <div class="notice-title">Research Notice</div>
+        <div class="notice-text">Not for critical decisions. Research only.</div>
+        <div class="notice-text">Built as a research demonstration within the Shunyaya Framework.</div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const cycles = {
+      second: { periodMs: 1000, weight: 1.5 },
+      minute: { periodMs: 60000, weight: 1.2 },
+      hour: { periodMs: 3600000, weight: 1.0 },
+      day: { periodMs: 86400000, weight: 1.0 },
+      week: { periodMs: 604800000, weight: 0.8 },
+      month: { periodMs: 30.436875 * 86400000, weight: 0.6 },
+      year: { periodMs: 365.2425 * 86400000, weight: 0.5 }
+    };
+
+    const governanceCycles = ['second', 'minute', 'hour', 'day', 'week'];
+    const criticalCycles = new Set(['second', 'minute', 'hour', 'day']);
+
+    const state = {
+      running: false,
+      timer: null,
+      tickMs: 1000,
+      observationMode: 'host_assist',
+      driftPpm: 0,
+      maxCorrectionMs: 250,
+      promotionThreshold: 3,
+      acquireThresholdMs: 5000,
+      softLimitMs: 100,
+      hardLimitMs: 2500,
+      internalMs: Date.now(),
+      lastMono: performance.now(),
+      observedMs: Date.now(),
+      currentState: 'GENERAL_TIME',
+      displayState: 'GENERAL_TIME',
+      healthyStreak: 0,
+      recoveryStreak: 0,
+      acquireCount: 0,
+      holdoverCount: 0,
+      abstainCount: 0,
+      promoteCount: 0,
+      recoveryCount: 0,
+      postResidual: 0,
+      obsResidual: 0,
+      appliedCorrection: 0,
+      rawState: 'GENERAL_TIME',
+      softCriticalCount: 0,
+      hardCriticalCount: 0,
+      capsule: null,
+      eventLog: [],
+      reentryShiftMs: 0,
+      reentryTargetDays: 0,
+      reentryHoldUntilMs: 0,
+      forceAcquire: false,
+      lastReentryScore: null,
+      lastReentryDayOffset: null,
+      receipt: '--',
+      disturbanceText: 'none',
+      disturbanceUntilMs: 0,
+      eventType: 'normal_tracking',
+      requestedGapDays: 0,
+      structuralJumpMs: 0,
+      logLimit: 60
+    };
+
+    const el = id => document.getElementById(id);
+    const cycleList = el('cycleList');
+    const timeline = el('timeline');
+
+    function formatDateTime(ms) {
+      const d = new Date(ms);
+      return {
+        time: d.toLocaleTimeString('en-GB', { hour12: false }),
+        date: d.toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: '2-digit' })
+      };
+    }
+
+    function formatPhase(ms, periodMs) {
+      const v = ((ms % periodMs) + periodMs) % periodMs;
+      return v / periodMs;
+    }
+
+    function angdiff(a, b) {
+      return ((a - b + 0.5) % 1 + 1) % 1 - 0.5;
+    }
+
+    function cycleResidualMs(observedMs, internalMs, cycleName) {
+      const periodMs = cycles[cycleName].periodMs;
+      const obsPhase = formatPhase(observedMs, periodMs);
+      const intPhase = formatPhase(internalMs, periodMs);
+      return angdiff(obsPhase, intPhase) * periodMs;
+    }
+
+    function weightedResidual(observedMs, internalMs, names = Object.keys(cycles)) {
+      let totalWeight = 0;
+      let totalValue = 0;
+      const residuals = {};
+      names.forEach(name => {
+        const r = cycleResidualMs(observedMs, internalMs, name);
+        residuals[name] = r;
+        totalWeight += cycles[name].weight;
+        totalValue += cycles[name].weight * r;
+      });
+      return { mean: totalWeight ? totalValue / totalWeight : 0, residuals };
+    }
+
+    function calendarPenalty(observedMs, candidateMs, weekdayWeight, monthWeight, yeardayWeight, yearWeight) {
+      const obs = new Date(observedMs);
+      const cand = new Date(candidateMs);
+      let penalty = 0;
+
+      if (obs.getDay() !== cand.getDay()) penalty += weekdayWeight;
+      if (obs.getMonth() !== cand.getMonth()) penalty += monthWeight;
+
+      const startObs = new Date(obs.getFullYear(), 0, 0);
+      const startCand = new Date(cand.getFullYear(), 0, 0);
+      const ydObs = Math.floor((obs - startObs) / 86400000);
+      const ydCand = Math.floor((cand - startCand) / 86400000);
+      const ydDiff = Math.abs(ydObs - ydCand);
+      penalty += yeardayWeight * Math.min(ydDiff, 366 - ydDiff);
+
+      if (obs.getFullYear() !== cand.getFullYear()) {
+        penalty += yearWeight * Math.abs(obs.getFullYear() - cand.getFullYear());
+      }
+      return penalty;
+    }
+
+    function combinedScore(observedMs, candidateMs) {
+      const gov = weightedResidual(observedMs, candidateMs);
+      let score = 0;
+      Object.entries(gov.residuals).forEach(([name, residual]) => {
+        score += cycles[name].weight * residual * residual;
+      });
+      score += calendarPenalty(observedMs, candidateMs, 1500, 2000, 75, 20000);
+      return score;
+    }
+
+    function acquireTimeLongHorizon(observedMs, internalMs, targetDays = 90) {
+      let bestMs = internalMs;
+      let bestScore = combinedScore(observedMs, bestMs);
+      let bestDayOffset = 0;
+      const targetDayOffset = Math.round(targetDays);
+      const dayWindow = Math.max(240, Math.abs(targetDayOffset) + 14);
+
+      for (let d = -dayWindow; d <= dayWindow; d += 1) {
+        const candidate = internalMs + d * 86400000;
+        const score = combinedScore(observedMs, candidate);
+        if (score < bestScore) {
+          bestScore = score;
+          bestMs = candidate;
+          bestDayOffset = d;
+        }
+      }
+
+      let center = bestMs;
+      for (let h = -24; h <= 24; h += 1) {
+        const candidate = center + h * 3600000;
+        const score = combinedScore(observedMs, candidate);
+        if (score < bestScore) {
+          bestScore = score;
+          bestMs = candidate;
+        }
+      }
+
+      center = bestMs;
+      for (let s = -7200; s <= 7200; s += 60) {
+        const candidate = center + s * 1000;
+        const score = combinedScore(observedMs, candidate);
+        if (score < bestScore) {
+          bestScore = score;
+          bestMs = candidate;
+        }
+      }
+
+      center = bestMs;
+      for (let ms = -60000; ms <= 60000; ms += 250) {
+        const candidate = center + ms;
+        const score = combinedScore(observedMs, candidate);
+        if (score < bestScore) {
+          bestScore = score;
+          bestMs = candidate;
+        }
+      }
+
+      return { bestMs, bestScore, bestDayOffset };
+    }
+
+    function fnv1aHex(str) {
+      let hash = 0x811c9dc5;
+      for (let i = 0; i < str.length; i += 1) {
+        hash ^= str.charCodeAt(i);
+        hash = Math.imul(hash, 0x01000193);
+      }
+      return ('00000000' + (hash >>> 0).toString(16)).slice(-8);
+    }
+
+    function updateReceipt() {
+      const payload = JSON.stringify({
+        internalMs: Math.round(state.internalMs),
+        observedMs: Math.round(state.observedMs),
+        displayState: state.displayState,
+        rawState: state.rawState,
+        postResidual: Number(state.postResidual.toFixed(3)),
+        driftPpm: state.driftPpm,
+        healthyStreak: state.healthyStreak,
+        recoveryStreak: state.recoveryStreak,
+        acquireCount: state.acquireCount,
+        holdoverCount: state.holdoverCount,
+        abstainCount: state.abstainCount,
+        promoteCount: state.promoteCount,
+        recoveryCount: state.recoveryCount,
+        lastReentryScore: state.lastReentryScore === null ? null : Number(state.lastReentryScore.toFixed(3)),
+        lastReentryDayOffset: state.lastReentryDayOffset
+      });
+      state.receipt = fnv1aHex(payload);
+    }
+
+    function classifyState(absMean, residuals) {
+      const soft = [];
+      const hard = [];
+      for (const [name, residual] of Object.entries(residuals)) {
+        if (!criticalCycles.has(name)) continue;
+        const abs = Math.abs(residual);
+        if (abs > state.hardLimitMs) hard.push(name);
+        else if (abs > state.softLimitMs) soft.push(name);
+      }
+      if (hard.length) return { raw: 'ABSTAIN', soft, hard };
+      if (soft.length) return { raw: 'HOLDOVER', soft, hard };
+      if (absMean <= 10) return { raw: 'FULL_LOCK', soft, hard };
+      if (absMean <= 100) return { raw: 'GENERAL_TIME', soft, hard };
+      if (absMean <= 1000) return { raw: 'HOLDOVER', soft, hard };
+      return { raw: 'ABSTAIN', soft, hard };
+    }
+
+    function applyHysteresis(previousState, rawState) {
+      let promoted = false;
+      let recoveryEvent = false;
+
+      if (rawState === 'ABSTAIN') {
+        state.healthyStreak = 0;
+        state.recoveryStreak = 0;
+        return { displayState: 'ABSTAIN', promoted, recoveryEvent };
+      }
+      if (rawState === 'HOLDOVER') {
+        state.healthyStreak = 0;
+        state.recoveryStreak = 0;
+        return { displayState: 'HOLDOVER', promoted, recoveryEvent };
+      }
+      if (rawState === 'GENERAL_TIME') {
+        if (previousState === 'HOLDOVER') {
+          state.recoveryStreak += 1;
+          if (state.recoveryStreak >= state.promotionThreshold) {
+            recoveryEvent = true;
+            state.recoveryStreak = 0;
+            return { displayState: 'GENERAL_TIME', promoted, recoveryEvent };
+          }
+          return { displayState: 'HOLDOVER', promoted, recoveryEvent };
+        }
+        state.healthyStreak = 0;
+        state.recoveryStreak = 0;
+        return { displayState: 'GENERAL_TIME', promoted, recoveryEvent };
+      }
+      if (rawState === 'FULL_LOCK') {
+        if (previousState === 'FULL_LOCK') {
+          state.healthyStreak += 1;
+          return { displayState: 'FULL_LOCK', promoted, recoveryEvent };
+        }
+        if (previousState === 'GENERAL_TIME' || previousState === 'HOLDOVER') {
+          state.healthyStreak += 1;
+          if (state.healthyStreak >= state.promotionThreshold) {
+            promoted = true;
+            recoveryEvent = previousState === 'HOLDOVER';
+            state.healthyStreak = 0;
+            state.recoveryStreak = 0;
+            return { displayState: 'FULL_LOCK', promoted, recoveryEvent };
+          }
+          if (previousState === 'HOLDOVER') {
+            return { displayState: 'HOLDOVER', promoted, recoveryEvent };
+          }
+          return { displayState: 'GENERAL_TIME', promoted, recoveryEvent };
+        }
+      }
+      return { displayState: rawState, promoted, recoveryEvent };
+    }
+
+    function logEvent(text) {
+      const stamp = new Date().toLocaleTimeString('en-GB', { hour12: false });
+      state.eventLog.unshift({ stamp, text });
+      state.eventLog = state.eventLog.slice(0, state.logLimit);
+      renderTimeline();
+    }
+
+    function renderTimeline() {
+      timeline.innerHTML = state.eventLog.map(e => `
+        <div class="event">
+          <div class="mono" style="color:var(--muted); margin-bottom:4px;">${e.stamp}</div>
+          <div>${e.text}</div>
+        </div>
+      `).join('');
+    }
+
+    function setStatePill(name) {
+      const dot = el('stateDot');
+      el('stateText').textContent = name;
+      el('heroState').textContent = name;
+      let color = 'var(--accent)';
+      if (name === 'FULL_LOCK') color = 'var(--good)';
+      else if (name === 'GENERAL_TIME' || name === 'HOLDOVER' || name === 'ACQUIRE') color = 'var(--warn)';
+      else if (name === 'ABSTAIN') color = 'var(--bad)';
+      dot.style.background = color;
+      el('statePill').style.borderColor = color;
+    }
+
+    function renderCycles(observedMs, internalMs) {
+      cycleList.innerHTML = Object.keys(cycles).map(name => {
+        const period = cycles[name].periodMs;
+        const obsPhase = formatPhase(observedMs, period);
+        const intPhase = formatPhase(internalMs, period);
+        const residual = cycleResidualMs(observedMs, internalMs, name);
+        return `
+          <div class="cycle">
+            <div class="cycle-head">
+              <div class="cycle-name">${name}</div>
+              <div class="cycle-meta mono">residual=${residual.toFixed(1)} ms</div>
+            </div>
+            <div class="bar">
+              <div class="fill-expected" style="left:0; width:${(intPhase * 100).toFixed(2)}%"></div>
+              <div class="fill-observed" style="left:0; width:${(obsPhase * 100).toFixed(2)}%"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function render() {
+      const observed = state.running ? state.observedMs : getObservedMs();
+      const i = formatDateTime(state.internalMs);
+      const o = formatDateTime(observed);
+      el('internalTime').textContent = i.time;
+      el('internalDate').textContent = i.date;
+      el('observedTime').textContent = o.time;
+      el('observedDate').textContent = o.date;
+      el('obsResidual').textContent = state.obsResidual.toFixed(1);
+      el('appliedCorrection').textContent = state.appliedCorrection.toFixed(1);
+      el('postResidual').textContent = state.postResidual.toFixed(1);
+      el('heroResidual').textContent = state.postResidual.toFixed(1);
+      updateReceipt();
+      el('heroMode').textContent = state.observationMode;
+      el('heroDrift').textContent = String(state.driftPpm);
+      el('heroHealthy').textContent = String(state.healthyStreak);
+      el('heroRecovery').textContent = String(state.recoveryStreak);
+      el('heroRawState').textContent = state.rawState;
+      el('heroReceipt').textContent = state.receipt;
+      el('disturbanceBanner').textContent = `Disturbance: ${state.disturbanceText}`;
+      el('reentryFlow').textContent = state.observationMode === 'continuity_reentry'
+        ? 'Flow: re-entry mode active -> searched reacquisition in progress'
+        : 'Flow: auto-capture state -> simulate elapsed gap -> searched reacquisition';
+      el('metricRequestedGap').textContent = state.requestedGapDays ? `${state.requestedGapDays} day(s)` : '--';
+      el('metricStructuralJump').textContent = state.structuralJumpMs ? `${Math.round(state.structuralJumpMs / 1000).toLocaleString('en-GB')} s` : '--';
+      const displayEventLabel = getDisplayEventLabel(state.eventType);
+      el('metricEventType').textContent = displayEventLabel;
+      el('topEventType').textContent = displayEventLabel;
+      el('topRequestedGap').textContent = state.requestedGapDays ? `${state.requestedGapDays} day(s)` : '--';
+      el('topStructuralJump').textContent = state.structuralJumpMs ? `${Math.round(state.structuralJumpMs / 1000).toLocaleString('en-GB')} s` : '--';
+      el('topDisturbance').textContent = state.disturbanceText;
+      el('acquireCount').textContent = String(state.acquireCount);
+      el('holdoverCount').textContent = String(state.holdoverCount);
+      el('abstainCount').textContent = String(state.abstainCount);
+      el('metricPromotions').textContent = String(state.promoteCount);
+      el('metricRecoveries').textContent = String(state.recoveryCount);
+      el('metricSoft').textContent = String(state.softCriticalCount);
+      el('metricHard').textContent = String(state.hardCriticalCount);
+      el('metricReentryScore').textContent = state.lastReentryScore === null ? '--' : state.lastReentryScore.toExponential(3);
+      el('metricDayOffset').textContent = state.lastReentryDayOffset === null ? '--' : String(state.lastReentryDayOffset);
+      el('topContinuityStatus').textContent = el('capsuleStatus').textContent;
+      setStatePill(state.displayState);
+      renderCycles(observed, state.internalMs);
+    }
+
+    function captureContinuityMemory(baseInternalMs = state.internalMs, tag = '') {
+      state.capsule = {
+        internalMs: baseInternalMs,
+        displayState: state.displayState,
+        healthyStreak: state.healthyStreak,
+        recoveryStreak: state.recoveryStreak,
+        savedAt: Date.now(),
+        tag
+      };
+    }
+
+    function chooseReentryBaselineMs() {
+      const currentObserved = Date.now();
+      const alignedEnough = Number.isFinite(state.postResidual) && Math.abs(state.postResidual) < 5000;
+      const safeMode = state.observationMode !== 'continuity_reentry';
+      if (safeMode && alignedEnough && Number.isFinite(state.internalMs)) {
+        return state.internalMs;
+      }
+      return currentObserved;
+    }
+
+    function clampReentryDays(value) {
+      const n = Number(value);
+      if (!Number.isFinite(n)) return 90;
+      return Math.max(1, Math.min(180, Math.round(n)));
+    }
+
+    function getDisplayEventLabel(eventType) {
+      switch (eventType) {
+        case 'long_gap_reentry_pre_acquire':
+          return 'Long Gap: Pre-Acquire';
+        case 'long_gap_reentry_search':
+          return 'Long Gap: Structural Search';
+        case 'long_gap_reentry_tracking':
+          return 'Long Gap: Tracking';
+        case 'long_gap_reentry_cleanup':
+          return 'Long Gap: Final Alignment';
+        case 'bad_anchor_disturbance':
+          return 'Bad Anchor Disturbance';
+        case 'pause_resume_realign':
+          return 'Pause/Resume Realignment';
+        case 'free_run':
+          return 'Free-Run Tracking';
+        case 'paused':
+          return 'Paused';
+        case 'normal_tracking':
+          return 'Normal Tracking';
+        default:
+          return 'Structural Alignment';
+      }
+    }
+
+    function runLongGapReentry() {
+      const days = clampReentryDays(el('reentryDays').value || 90);
+      el('reentryDays').value = String(days);
+      const elapsedMs = days * 86400000;
+      const baselineMs = chooseReentryBaselineMs();
+      captureContinuityMemory(baselineMs, 'auto-reentry');
+
+      state.reentryShiftMs = elapsedMs;
+      state.reentryTargetDays = days;
+      state.requestedGapDays = days;
+      state.structuralJumpMs = elapsedMs;
+      state.reentryHoldUntilMs = Date.now() + 4000;
+      state.forceAcquire = true;
+      state.lastReentryScore = null;
+      state.lastReentryDayOffset = null;
+      state.eventType = 'long_gap_reentry_pre_acquire';
+
+      state.observationMode = 'continuity_reentry';
+      el('modeSelect').value = 'continuity_reentry';
+
+      state.internalMs = baselineMs;
+      state.observedMs = Date.now() + elapsedMs;
+      const preGov = weightedResidual(state.observedMs, state.internalMs, governanceCycles);
+      state.obsResidual = preGov.mean;
+      state.postResidual = preGov.mean;
+      state.appliedCorrection = 0;
+      state.currentState = 'GENERAL_TIME';
+      state.displayState = 'ACQUIRE';
+      state.rawState = 'ACQUIRE';
+      state.healthyStreak = 0;
+      state.recoveryStreak = 0;
+      state.disturbanceText = `long-gap re-entry active (+${days} days, pre-acquire hold)`;
+      state.disturbanceUntilMs = Date.now() + 10000;
+
+      el('capsuleStatus').textContent = `Continuity memory: auto-captured at ${new Date(state.capsule.savedAt).toLocaleString('en-GB')} from a clean baseline and replayed with a ${days}-day elapsed gap.`;
+      logEvent(`Long-gap continuity re-entry initiated for ${days} days with auto-captured clean baseline.`);
+      if (!state.running) {
+        startEngine();
+      }
+      render();
+    }
+
+    function applyBadAnchor() {
+      const minutes = Number(el('badAnchorMinutes').value || 90);
+
+      state.reentryShiftMs = 0;
+      state.reentryTargetDays = 0;
+      state.reentryHoldUntilMs = 0;
+      state.forceAcquire = false;
+      state.lastReentryScore = null;
+      state.lastReentryDayOffset = null;
+      state.requestedGapDays = 0;
+      state.structuralJumpMs = 0;
+
+      if (state.observationMode === 'continuity_reentry') {
+        state.observationMode = 'host_assist';
+        el('modeSelect').value = 'host_assist';
+      }
+
+      state.internalMs += minutes * 60000;
+      state.observedMs = getObservedMs();
+
+      const instantGov = weightedResidual(state.observedMs, state.internalMs, governanceCycles);
+      const classified = classifyState(Math.abs(instantGov.mean), instantGov.residuals);
+
+      state.obsResidual = instantGov.mean;
+      state.postResidual = instantGov.mean;
+      state.appliedCorrection = 0;
+      state.currentState = 'GENERAL_TIME';
+      state.displayState = 'GENERAL_TIME';
+      state.rawState = classified.raw;
+      state.softCriticalCount = classified.soft.length;
+      state.hardCriticalCount = classified.hard.length;
+      state.eventType = 'bad_anchor_disturbance';
+      state.disturbanceText = `bad anchor active (${minutes >= 0 ? '+' : ''}${minutes} min)`;
+      state.disturbanceUntilMs = Date.now() + 5000;
+
+      logEvent(`Bad anchor applied live: internal time shifted by ${minutes} minutes.`);
+      render();
+    }
+
+    function getObservedMs() {
+      if (state.observationMode === 'free_run') return state.internalMs;
+      if (state.observationMode === 'continuity_reentry') {
+        return Date.now() + state.reentryShiftMs;
+      }
+      return Date.now();
+    }
+
+    function tick() {
+      const nowMono = performance.now();
+
+      if (state.disturbanceUntilMs && Date.now() > state.disturbanceUntilMs) {
+        state.disturbanceUntilMs = 0;
+        state.disturbanceText = 'none';
+        if (state.eventType === 'bad_anchor_disturbance' || state.eventType === 'pause_resume_realign') {
+          state.eventType = 'normal_tracking';
+        }
+      }
+
+      const elapsedRaw = nowMono - state.lastMono;
+      state.lastMono = nowMono;
+      const driftFactor = 1 + state.driftPpm / 1000000;
+      const elapsedEffective = elapsedRaw * driftFactor;
+      let predicted = state.internalMs + elapsedEffective;
+      state.observedMs = getObservedMs();
+
+      if (state.observationMode === 'free_run') {
+        state.internalMs = predicted;
+        state.obsResidual = 0;
+        state.appliedCorrection = 0;
+        state.postResidual = 0;
+        state.currentState = 'GENERAL_TIME';
+        state.displayState = 'GENERAL_TIME';
+        state.rawState = 'GENERAL_TIME';
+        state.softCriticalCount = 0;
+        state.hardCriticalCount = 0;
+        state.eventType = 'free_run';
+        render();
+        return;
+      }
+
+      const govBefore = weightedResidual(state.observedMs, predicted, governanceCycles);
+      state.obsResidual = govBefore.mean;
+
+      let acquired = false;
+      const inReentryHold = state.observationMode === 'continuity_reentry' && Date.now() < state.reentryHoldUntilMs;
+
+      if (inReentryHold) {
+        state.displayState = 'ACQUIRE';
+        state.currentState = 'GENERAL_TIME';
+        state.rawState = 'ACQUIRE';
+        state.appliedCorrection = 0;
+        state.postResidual = govBefore.mean;
+        state.eventType = 'long_gap_reentry_pre_acquire';
+        render();
+        return;
+      }
+
+      if (state.observationMode === 'continuity_reentry' && state.reentryHoldUntilMs) {
+        state.reentryHoldUntilMs = 0;
+        state.disturbanceText = `long-gap re-entry active (+${Math.round(state.reentryShiftMs / 86400000)} days, searched reacquisition)`;
+        state.eventType = 'long_gap_reentry_search';
+      }
+
+      if (state.observationMode === 'continuity_reentry' && (state.forceAcquire || Math.abs(govBefore.mean) > state.acquireThresholdMs)) {
+        const reentryDays = Math.round(state.reentryShiftMs / 86400000);
+        const reentry = acquireTimeLongHorizon(state.observedMs, predicted, reentryDays);
+        predicted = reentry.bestMs;
+        state.lastReentryScore = reentry.bestScore;
+        state.lastReentryDayOffset = reentry.bestDayOffset;
+        state.acquireCount += 1;
+        state.forceAcquire = false;
+        acquired = true;
+        state.eventType = 'long_gap_reentry_search';
+        logEvent(`Re-entry search solved with day_offset=${reentry.bestDayOffset} and score=${reentry.bestScore.toExponential(3)}.`);
+      } else if (Math.abs(govBefore.mean) > state.acquireThresholdMs) {
+        predicted = state.observedMs;
+        state.acquireCount += 1;
+        acquired = true;
+      }
+
+      const govPredicted = weightedResidual(state.observedMs, predicted, governanceCycles);
+      const bounded = Math.max(-state.maxCorrectionMs, Math.min(state.maxCorrectionMs, govPredicted.mean));
+      state.appliedCorrection = bounded;
+      state.internalMs = predicted + bounded;
+
+      const postGov = weightedResidual(state.observedMs, state.internalMs, governanceCycles);
+      state.postResidual = postGov.mean;
+      const postClassified = classifyState(Math.abs(postGov.mean), postGov.residuals);
+      state.rawState = postClassified.raw;
+      state.softCriticalCount = postClassified.soft.length;
+      state.hardCriticalCount = postClassified.hard.length;
+
+      if (acquired) {
+        state.displayState = 'ACQUIRE';
+        state.currentState = 'GENERAL_TIME';
+      } else {
+        const hyster = applyHysteresis(state.currentState, postClassified.raw);
+        state.displayState = hyster.displayState;
+        state.currentState = hyster.displayState;
+        if (hyster.promoted) state.promoteCount += 1;
+        if (hyster.recoveryEvent) state.recoveryCount += 1;
+      }
+
+      if (state.displayState === 'HOLDOVER') state.holdoverCount += 1;
+      if (state.displayState === 'ABSTAIN') state.abstainCount += 1;
+
+      if (!acquired) {
+        if (state.observationMode === 'continuity_reentry') {
+          state.eventType = Math.abs(state.postResidual) <= 5 ? 'long_gap_reentry_cleanup' : 'long_gap_reentry_tracking';
+        } else if (Math.abs(state.postResidual) > 0.1) {
+          state.eventType = 'normal_tracking';
+        }
+      }
+
+      render();
+    }
+
+    function startEngine() {
+      if (state.timer) clearInterval(state.timer);
+      state.tickMs = Number(el('tickSelect').value);
+      state.observationMode = el('modeSelect').value;
+      state.driftPpm = Number(el('driftInput').value);
+      state.maxCorrectionMs = Number(el('maxCorrection').value);
+      state.promotionThreshold = Number(el('promoThreshold').value);
+      state.running = true;
+      state.lastMono = performance.now();
+      state.timer = setInterval(tick, state.tickMs);
+      logEvent(`Engine started in ${state.observationMode} mode.`);
+      render();
+    }
+
+    function pauseEngine() {
+      if (state.timer) clearInterval(state.timer);
+      state.timer = null;
+      state.running = false;
+      state.eventType = 'paused';
+      logEvent('Engine paused.');
+      render();
+    }
+
+    function resumeEngine() {
+      if (state.timer) return;
+      state.lastMono = performance.now();
+      state.running = true;
+      state.timer = setInterval(tick, state.tickMs);
+      logEvent('Engine resumed.');
+      render();
+    }
+
+    function resetEngine() {
+      if (state.timer) clearInterval(state.timer);
+      state.running = false;
+      state.timer = null;
+      state.tickMs = Number(el('tickSelect').value);
+      state.observationMode = el('modeSelect').value;
+      state.driftPpm = Number(el('driftInput').value);
+      state.maxCorrectionMs = Number(el('maxCorrection').value);
+      state.promotionThreshold = Number(el('promoThreshold').value);
+      state.internalMs = Date.now();
+      state.lastMono = performance.now();
+      state.observedMs = Date.now();
+      state.currentState = 'GENERAL_TIME';
+      state.displayState = 'GENERAL_TIME';
+      state.healthyStreak = 0;
+      state.recoveryStreak = 0;
+      state.acquireCount = 0;
+      state.holdoverCount = 0;
+      state.abstainCount = 0;
+      state.promoteCount = 0;
+      state.recoveryCount = 0;
+      state.postResidual = 0;
+      state.obsResidual = 0;
+      state.appliedCorrection = 0;
+      state.capsule = null;
+      state.eventLog = [];
+      state.reentryShiftMs = 0;
+      state.reentryTargetDays = 0;
+      state.reentryHoldUntilMs = 0;
+      state.forceAcquire = false;
+      state.lastReentryScore = null;
+      state.lastReentryDayOffset = null;
+      state.requestedGapDays = 0;
+      state.structuralJumpMs = 0;
+      state.eventType = 'normal_tracking';
+      state.rawState = 'GENERAL_TIME';
+      state.softCriticalCount = 0;
+      state.hardCriticalCount = 0;
+      state.receipt = '--';
+      el('capsuleStatus').textContent = 'Continuity memory: waiting for live auto-capture.';
+      state.disturbanceText = 'none';
+      state.disturbanceUntilMs = 0;
+      logEvent('Engine reset to fresh structural state.');
+      render();
+    }
+
+    el('startBtn').addEventListener('click', startEngine);
+    el('pauseBtn').addEventListener('click', pauseEngine);
+    el('resumeBtn').addEventListener('click', resumeEngine);
+    el('resetBtn').addEventListener('click', resetEngine);
+    el('reentryBtn').addEventListener('click', runLongGapReentry);
+    el('badAnchorBtn').addEventListener('click', applyBadAnchor);
+
+    el('driftRange').addEventListener('input', e => {
+      el('driftInput').value = e.target.value;
+      state.driftPpm = Number(e.target.value);
+      el('heroDrift').textContent = e.target.value;
+    });
+
+    el('driftInput').addEventListener('input', e => {
+      el('driftRange').value = e.target.value;
+      state.driftPpm = Number(e.target.value);
+      el('heroDrift').textContent = e.target.value;
+    });
+
+    el('modeSelect').addEventListener('change', e => {
+      state.observationMode = e.target.value;
+
+      if (e.target.value !== 'continuity_reentry') {
+        state.reentryShiftMs = 0;
+        state.reentryTargetDays = 0;
+        state.reentryHoldUntilMs = 0;
+        state.forceAcquire = false;
+        state.lastReentryScore = null;
+        state.lastReentryDayOffset = null;
+        state.requestedGapDays = 0;
+        state.structuralJumpMs = 0;
+        if (state.eventType !== 'bad_anchor_disturbance' && state.eventType !== 'paused' && state.eventType !== 'free_run') {
+          state.eventType = 'normal_tracking';
+        }
+      }
+
+      el('heroMode').textContent = e.target.value;
+      render();
+    });
+
+    el('tickSelect').addEventListener('change', e => {
+      state.tickMs = Number(e.target.value);
+      if (state.running) {
+        clearInterval(state.timer);
+        state.timer = setInterval(tick, state.tickMs);
+      }
+    });
+
+    el('maxCorrection').addEventListener('input', e => {
+      state.maxCorrectionMs = Number(e.target.value);
+    });
+
+    el('promoThreshold').addEventListener('input', e => {
+      state.promotionThreshold = Number(e.target.value);
+    });
+
+    logEvent('Demo initialized and ready.');
+    render();
+  </script>
+</body>
+</html>
