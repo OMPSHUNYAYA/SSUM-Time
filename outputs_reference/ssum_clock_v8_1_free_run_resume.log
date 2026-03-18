@@ -1,0 +1,22 @@
+2026-03-17 08:09:04 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:00
+2026-03-17 08:09:05 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:01
+2026-03-17 08:09:06 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:02
+2026-03-17 08:09:07 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:03
+2026-03-17 08:09:08 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:04
+2026-03-17 08:09:09 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:05
+2026-03-17 08:09:10 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:06
+2026-03-17 08:09:11 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:07
+2026-03-17 08:09:12 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:08
+2026-03-17 08:09:13 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:09
+SUMMARY | iter=10 | uptime=00:00:09 | state=GENERAL_TIME | post_residual=0.0ms | acquire=0 | holdover=0 | abstain=0 | promote=0 | recovery=0 | drift_ppm=0.000 | free_run=1 | capsule_saved=1 | capsule_writes=1
+2026-03-17 08:09:14 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:10
+2026-03-17 08:09:15 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:11
+2026-03-17 08:09:16 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:12
+2026-03-17 08:09:17 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:13
+2026-03-17 08:09:18 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:14
+2026-03-17 08:09:19 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:15
+2026-03-17 08:09:20 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:16
+2026-03-17 08:09:21 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:17
+2026-03-17 08:09:22 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:18
+2026-03-17 08:09:23 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:19
+SUMMARY | iter=20 | uptime=00:00:19 | state=GENERAL_TIME | post_residual=0.0ms | acquire=0 | holdover=0 | abstain=0 | promote=0 | recovery=0 | drift_ppm=0.000 | free_run=1 | capsule_saved=1 | capsule_writes=2

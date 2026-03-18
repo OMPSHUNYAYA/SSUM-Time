@@ -1,0 +1,27 @@
+SHA256 hash of D:\OMP\SSUM-TIME\Public_Release\outputs_reference\ssum_clock_state_v8_1.json:
+47946681bb64f7649b0b389e61ee36953f0d42af7a66d31eeafee8235f1722c2
+CertUtil: -hashfile command completed successfully.
+SHA256 hash of D:\OMP\SSUM-TIME\Public_Release\outputs_reference\ssum_clock_state_v8_1_free_run.json:
+1c91f908eb717081e0b7259cc14ae45ca3a694544c441679542872d75ffc6689
+CertUtil: -hashfile command completed successfully.
+SHA256 hash of D:\OMP\SSUM-TIME\Public_Release\outputs_reference\ssum_clock_state_v8_1_free_run_resume.json:
+c94d4d69a57ab6e29739197185a8ea3b0301700780ee863c2bdffdd9e27ea6a8
+CertUtil: -hashfile command completed successfully.
+SHA256 hash of D:\OMP\SSUM-TIME\Public_Release\outputs_reference\ssum_clock_v8_1.log:
+23f93b91a553c32e0db0ab13eacf4c2308392b24e2c934d5affec4e02420be32
+CertUtil: -hashfile command completed successfully.
+SHA256 hash of D:\OMP\SSUM-TIME\Public_Release\outputs_reference\ssum_clock_v8_1_free_run.log:
+5b478abcb3e975d4f9b005c79430b2f0da4938cf894f2a39484fd6c85612ad21
+CertUtil: -hashfile command completed successfully.
+SHA256 hash of D:\OMP\SSUM-TIME\Public_Release\outputs_reference\ssum_clock_v8_1_free_run_resume.log:
+8d193f9b1e5cbd15151dc45ea8a40e32755373e91026abcdbd66561eec067383
+CertUtil: -hashfile command completed successfully.
+SHA256 hash of D:\OMP\SSUM-TIME\Public_Release\outputs_reference\ssum_time_capsule_v8_1.json:
+ca0fa5290bb75f43375105d442f08500c6d9d9b09800497d33edb038a929de56
+CertUtil: -hashfile command completed successfully.
+SHA256 hash of D:\OMP\SSUM-TIME\Public_Release\outputs_reference\ssum_time_capsule_v8_1_drift_250ppm.json:
+79af7926c6614d30547b5ffda91d58879d5a994d4c5e095a7edba366fce69962
+CertUtil: -hashfile command completed successfully.
+SHA256 hash of D:\OMP\SSUM-TIME\Public_Release\outputs_reference\ssum_time_capsule_v8_1_free_run.json:
+84b5b34718104e106e53f02cd519fcba8205210d90159263166abf5c9733976d
+CertUtil: -hashfile command completed successfully.

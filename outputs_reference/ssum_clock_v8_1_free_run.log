@@ -1,0 +1,23 @@
+2026-03-17 08:07:49 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:00
+2026-03-17 08:07:50 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:01
+2026-03-17 08:07:51 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:02
+2026-03-17 08:07:52 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:03
+2026-03-17 08:07:53 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:04
+2026-03-17 08:07:54 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:05
+2026-03-17 08:07:55 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:06
+2026-03-17 08:07:56 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:07
+2026-03-17 08:07:57 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:08
+2026-03-17 08:07:58 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:09
+SUMMARY | iter=10 | uptime=00:00:09 | state=GENERAL_TIME | post_residual=0.0ms | acquire=0 | holdover=0 | abstain=0 | promote=0 | recovery=0 | drift_ppm=0.000 | free_run=1 | capsule_saved=1 | capsule_writes=1
+2026-03-17 08:07:59 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:10
+2026-03-17 08:08:00 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:11
+2026-03-17 08:08:01 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:12
+2026-03-17 08:08:02 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:13
+2026-03-17 08:08:03 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:14
+2026-03-17 08:08:04 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:15
+2026-03-17 08:08:05 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:16
+2026-03-17 08:08:06 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:17
+2026-03-17 08:08:07 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:18
+2026-03-17 08:08:08 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:19
+SUMMARY | iter=20 | uptime=00:00:19 | state=GENERAL_TIME | post_residual=0.0ms | acquire=0 | holdover=0 | abstain=0 | promote=0 | recovery=0 | drift_ppm=0.000 | free_run=1 | capsule_saved=1 | capsule_writes=2
+2026-03-17 08:08:09 | GENERAL_TIME | res=0.0ms | drift=0.0ppm | uptime=00:00:20
