@@ -4,6 +4,8 @@
 
 **Time reconstructed through deterministic cycle alignment**
 
+[![SSUM-Time CI](https://github.com/OMPSHUNYAYA/SSUM-Time/actions/workflows/ssum-time-ci.yml/badge.svg)](https://github.com/OMPSHUNYAYA/SSUM-Time/actions/workflows/ssum-time-ci.yml)
+
 ![Shunyaya](https://img.shields.io/badge/Shunyaya-Structural%20Time%20Engine-black)
 ![Deterministic](https://img.shields.io/badge/Deterministic-Yes-brightgreen)
 ![Offline](https://img.shields.io/badge/Offline-Capable-blue)
@@ -485,9 +487,7 @@ This release includes the demo, scripts, and outputs as a reference implementati
 
 Correctness governed by deterministic behavior.
 
-See:
-
-`LICENSE`
+See: [LICENSE](LICENSE)
 
 Reference Implementation: Open Standard  
 Architecture: CC BY-NC 4.0
