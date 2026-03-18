@@ -1,0 +1,170 @@
+Open Standard License — SSUM-Time Reference Implementation
+
+SSUM-Time
+
+Structural Autonomous Time Engine
+
+
+Permission
+
+Permission is hereby granted, free of charge, to any person or organization to use, execute, study, reproduce, publish, distribute, modify, implement, or extend the SSUM-Time reference implementation, in whole or in part, without restriction.
+
+This permission applies to both commercial and non-commercial use.
+
+No registration required.
+No fees required.
+No approval required.
+
+
+No Restrictions
+
+This Open Standard reference implementation imposes no restrictions on implementation or use, except for truthful representation and non-misleading use of the SSUM-Time name.
+
+Attribution is not required.
+No endorsement or certification is implied.
+No runtime obligations apply.
+No implementation approval is required.
+
+Correctness and conformance are governed by deterministic structural behavior and replay-verifiable validation, not by licensing terms.
+
+Modified or extended implementations must not be represented as the canonical SSUM-Time reference implementation unless they fully preserve the normative architectural behavior defined in this document.
+
+
+Recommended Attribution (Optional)
+
+Attribution is recommended but not required.
+
+Preferred form:
+
+Implements SSUM-Time — Structural Autonomous Time Engine
+
+Attribution must not imply endorsement by the authors or the Shunyaya framework.
+
+Use of the name “SSUM-Time” must not imply:
+
+• endorsement
+• certification
+• official compliance approval
+• governance authority
+• authorship by the original authors
+
+
+Scope of the Reference Implementation
+
+This reference implementation includes the demo, scripts, outputs, validation traces, and supporting artifacts provided in this release.
+
+SSUM-Time defines a deterministic structural time reconstruction architecture based on alignment between multiple deterministic cycles.
+
+The architecture establishes the following conceptual model:
+
+t_est_next = t_est + f(observed_phase − expected_phase)
+
+Where:
+
+t_est — internal temporal estimate
+
+observed_phase — observed structural cycle phase
+
+expected_phase — predicted phase from the structural model
+
+f() — bounded structural correction function
+
+The reference implementation demonstrates:
+
+• structural cycle alignment for time reconstruction
+• deterministic correction of internal time estimates
+• reliability-aware governance states
+• graceful degradation under partial cycle loss
+• safety abstention when structural alignment cannot be trusted
+• persistence of temporal trajectory through continuity state (auto-captured in the reference demo)
+
+The reference implementation is provided to demonstrate architectural feasibility of structural time reconstruction.
+
+
+Conformance
+
+An implementation is considered compatible with the SSUM-Time reference architecture if it preserves the core structural principles demonstrated by the implementation, including:
+
+• deterministic structural correction behavior
+• structural phase alignment evaluation
+• bounded correction updates
+• explicit governance states controlling solver behavior
+• deterministic recovery behavior under replay conditions
+
+Independent implementations are permitted and encouraged.
+
+
+Relationship to Other Licenses
+
+This Open Standard license applies to the SSUM-Time reference implementation.
+
+The SSUM-Time conceptual architecture is released separately under the Creative Commons Attribution-NonCommercial 4.0 license (CC BY-NC 4.0).
+
+Reference implementations, example scripts, datasets, diagrams, validation traces, adapters, and tooling may be released under separate licenses if explicitly stated.
+
+Implementation licensing does not alter architectural interpretation of the SSUM-Time framework.
+
+Nothing in this license grants rights to use the SSUM-Time name as a trademark or to imply official status.
+
+
+Responsibility
+
+Use of SSUM-Time in operational, infrastructure, financial, AI, industrial, navigation, or safety-critical environments is undertaken entirely at the user’s own responsibility.
+
+SSUM-Time provides:
+
+• deterministic structural time inference
+• structural cycle alignment analysis
+• governance-based reliability classification
+• replay-verifiable experimental behavior
+
+It does not provide:
+
+• operational time authority
+• regulatory certification
+• safety guarantees
+
+
+No Warranty
+
+THE SSUM-TIME REFERENCE IMPLEMENTATION IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.
+
+IN NO EVENT SHALL THE AUTHORS OR CONTRIBUTORS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY ARISING FROM, OUT OF, OR IN CONNECTION WITH THE USE OF THIS IMPLEMENTATION.
+
+
+Creative Commons License — SSUM-Time Architecture
+
+Except for the SSUM-Time reference implementation (released as an Open Standard), the conceptual architecture, theoretical framework, and specification text are licensed under:
+
+Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)
+
+This permits:
+
+• sharing
+• copying
+• redistribution
+• adaptation
+• academic use
+• research publication
+
+for non-commercial purposes, provided appropriate credit is given.
+
+The architecture may be studied, cited, and reproduced for research and educational purposes.
+
+Commercial deployment of the architecture text or specification itself is not permitted under this license.
+
+Independent implementations of the architecture remain permitted under the Open Standard license governing the reference implementation.
+
+Full license text:
+https://creativecommons.org/licenses/by-nc/4.0/
+
+
+Closing Statement
+
+SSUM-Time is published to explore the possibility that temporal continuity can be reconstructed through deterministic structural alignment of cycles.
+
+The project is released openly to encourage independent research, validation, and implementation of structural time reconstruction architectures.
+
+Timekeeping, long governed by oscillators, may also be understood as a structural inference process.
+
+SSUM-Time is offered as a reference architecture for that exploration.
