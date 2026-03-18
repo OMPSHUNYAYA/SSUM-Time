@@ -1,0 +1,3 @@
+SHA256 hash of D:\OMP\SSUM-TIME\Public_Release\scripts\ssum_time_clock_v8_1.py:
+0ce5e292194ad7666a9fdfa49cd3d7481009cccff66944e5be1f43448d7707fe
+CertUtil: -hashfile command completed successfully.
