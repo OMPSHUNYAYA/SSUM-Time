@@ -1,0 +1,34 @@
+name: SSUM-Time CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  run-ssum-time:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+
+      - name: Verify Python version
+        run: python --version
+
+      - name: Run help command (sanity check)
+        run: |
+          cd scripts
+          python ssum_time_clock_v8_1.py --help
+
+      - name: Run short drift simulation (deterministic check)
+        run: |
+          cd scripts
+          python ssum_time_clock_v8_1.py --simulate-drift-ppm 50 --max-iterations 5
+
+      - name: CI Completed
+        run: echo "SSUM-Time CI passed successfully"
